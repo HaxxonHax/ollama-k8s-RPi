@@ -25,6 +25,11 @@ spec:
                 secretKeyRef:
                   name: discord-token
                   key: DISCORD_TOKEN
+            - name: REPLICATE_API_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: replicate-token
+                  key: REPLICATE_API_TOKEN
             - name: OLLAMA_URL
               value: http://ollama:11434
           readinessProbe:
