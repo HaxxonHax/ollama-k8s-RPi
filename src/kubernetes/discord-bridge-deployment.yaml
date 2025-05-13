@@ -17,11 +17,29 @@ spec:
         - name: discord-bridge
           image: discord-bridge:latest
           imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
           env:
             - name: DISCORD_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: discord-secret
-                  key: token
+                  name: discord-token
+                  key: DISCORD_TOKEN
             - name: OLLAMA_URL
               value: http://ollama:11434
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 15
+            timeoutSeconds: 5
+            failureThreshold: 3
