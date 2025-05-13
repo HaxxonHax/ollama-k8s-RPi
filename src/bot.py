@@ -5,11 +5,14 @@ import threading
 import os
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import logging
+import asyncio
+import json
 import aiohttp
 import discord
-import requests
 
+MAX_DISCORD_LENGTH = 4000
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
+
 OLLAMA_URL = os.getenv("OLLAMA_URL", "http://localhost:11434")
 OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "gemma3:1b-it-q4_K_M")
 
@@ -18,6 +21,9 @@ INTENTS.messages = True
 INTENTS.message_content = True
 
 CLIENT = discord.Client(intents=INTENTS)
+logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s')
+logger = logging.getLogger(__name__)
+
 
 # 🩺 Health server to support Kubernetes probes
 class HealthHandler(BaseHTTPRequestHandler):
@@ -55,47 +61,62 @@ async def on_message(message):
     """
       🎤 Respond to messages directed to the bot.
     """
-    # Ignore messages from the bot itself
     if message.author == CLIENT.user:
         return
 
-    is_mentioned = CLIENT.user in message.mentions
-    is_ask_command = message.content.startswith("!ask")
+    if CLIENT.user.mentioned_in(message) or message.content.startswith("!ask"):
+        prompt = message.content.replace(f"<@{CLIENT.user.id}>", "").replace("!ask", "").strip()
+        if not prompt:
+            await message.channel.send("📝 Please include a prompt after mentioning me or using `!ask`.")
+            return
 
-    if not (is_mentioned or is_ask_command):
-        return
+        try:
+            logger.info("[DEBUG] Sending prompt: %s", prompt)
+            timeout = aiohttp.ClientTimeout(total=600)
+            async with aiohttp.ClientSession(timeout=timeout) as session:
 
-    prompt = message.content
-    if is_ask_command:
-        prompt = prompt[len("!ask"):].strip()
-    elif is_mentioned:
-        prompt = prompt.replace(f"<@{CLIENT.user.id}>", "").strip()
+                async with session.post(
+                    f"{OLLAMA_URL}/api/generate",
+                    json={
+                        "model": OLLAMA_MODEL,
+                        "prompt": prompt,
+                        "options": {
+                            "temperature": 0.2,
+                            "num_predict": 800  # this limits tokens (400 => ~300–500 words)
+                        }
+                    },
+                ) as resp:
+                    if resp.status != 200:
+                        await message.channel.send("🚨 Ollama returned a non-200 response.")
+                        return
 
-    if not prompt:
-        await message.channel.send("Please include a prompt!")
-        return
+                    response_text = ""
+                    async for line in resp.content:
+                        decoded = line.decode("utf-8").strip()
+                        if decoded:
+                            try:
+                                data = json.loads(decoded)
+                                response_text += data.get("response", "")
+                            except Exception as parse_err:
+                                logger.warning("[WARN] Could not parse line: %s", decoded)
+                                logger.warning(parse_err)
 
-    print(f"[{message.author}] asked: {prompt}")
+                    final_response = response_text.strip()
+                    if len(final_response) > MAX_DISCORD_LENGTH:
+                        final_response = final_response[:MAX_DISCORD_LENGTH - 10] + " [...]"
 
-    try:
-        async with aiohttp.ClientSession() as session:
-            async with session.post(
-                f"{OLLAMA_URL}/api/generate",
-                json={"model": OLLAMA_MODEL, "prompt": prompt},
-                timeout=aiohttp.ClientTimeout(total=60)
-            ) as resp:
-                data = await resp.json()
-                reply = data.get("response", "🤖 Something went wrong.")
-                if reply:
-                    await message.channel.send(reply)
-                else:
-                    await message.channel.send("🤔 Got an empty response from Ollama.")
-    except requests.exceptions.RequestException as error_message:
-        logging.exception("❌ Error contacting Ollama: %s", error_message)
-        await message.channel.send("🚨 Failed to contact Ollama service.")
-    except Exception as error_message:
-        logging.exception("❌ Unexpected error: %s", error_message)
-        await message.channel.send("⚠️ An unexpected error occurred.")
+                    logger.info("[DEBUG] Response: %s", final_response)
+                    if final_response:
+                        await message.channel.send(final_response)
+                    else:
+                        await message.channel.send("🤔 Got an empty response from Ollama.")
+
+        except asyncio.TimeoutError:
+            logging.exception("⏰ Timed out while waiting for Ollama.")
+            await message.channel.send("⏰ Ollama took too long to respond.")
+        except Exception:
+            logging.exception("❌ Unexpected error")
+            await message.channel.send("⚠️ An unexpected error occurred.")
 
 
 @CLIENT.event
@@ -103,14 +124,16 @@ async def on_ready():
     """
       Print when we're ready.
     """
-    print(f"✅ Logged in as {CLIENT.user}")
+    logger.info("✅ Logged in as %s", CLIENT.user)
 
 # Start health server in background thread
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
 threading.Thread(target=run_health_server, daemon=True).start()
 
 # Run bot
 if not DISCORD_TOKEN:
-    print("❌ DISCORD_TOKEN environment variable not set.")
+    logger.error("❌ DISCORD_TOKEN environment variable not set.")
 else:
-    print("Starting BOT")
+    logger.info("Starting BOT")
     CLIENT.run(DISCORD_TOKEN)
