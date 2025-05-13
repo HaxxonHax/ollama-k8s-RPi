@@ -15,7 +15,8 @@ spec:
     spec:
       containers:
         - name: discord-bridge
-          image: haxxonhax/discord-bridge:latest
+          image: discord-bridge:latest
+          imagePullPolicy: Never
           env:
             - name: DISCORD_TOKEN
               valueFrom:
