@@ -1,0 +1,26 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: discord-bridge
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: discord-bridge
+  template:
+    metadata:
+      labels:
+        app: discord-bridge
+    spec:
+      containers:
+        - name: discord-bridge
+          image: haxxonhax/discord-bridge:latest
+          env:
+            - name: DISCORD_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: discord-secret
+                  key: token
+            - name: OLLAMA_URL
+              value: http://ollama:11434
