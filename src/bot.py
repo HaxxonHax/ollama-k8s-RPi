@@ -11,6 +11,7 @@ import aiohttp
 import discord
 
 MAX_DISCORD_LENGTH = 4000
+MAX_DISCORD_CHUNK = 1900
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
 
 OLLAMA_URL = os.getenv("OLLAMA_URL", "http://localhost:11434")
@@ -23,6 +24,27 @@ INTENTS.message_content = True
 CLIENT = discord.Client(intents=INTENTS)
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s')
 logger = logging.getLogger(__name__)
+
+
+def chunk_message(text, max_len=MAX_DISCORD_CHUNK):
+    """
+      Break up a message into multiple chunks before sending to not exceed limit.
+    """
+    lines = text.splitlines()
+    chunks = []
+    current = ""
+
+    for line in lines:
+        if len(current) + len(line) + 1 > max_len:
+            chunks.append(current)
+            current = line
+        else:
+            current += ("\n" if current else "") + line
+
+    if current:
+        chunks.append(current)
+
+    return chunks
 
 
 # 🩺 Health server to support Kubernetes probes
@@ -102,12 +124,12 @@ async def on_message(message):
                                 logger.warning(parse_err)
 
                     final_response = response_text.strip()
-                    if len(final_response) > MAX_DISCORD_LENGTH:
-                        final_response = final_response[:MAX_DISCORD_LENGTH - 10] + " [...]"
-
                     logger.info("[DEBUG] Response: %s", final_response)
+
                     if final_response:
-                        await message.channel.send(final_response)
+                        chunks = chunk_message(final_response)
+                        for chunk in chunks:
+                            await message.channel.send(chunk)
                     else:
                         await message.channel.send("🤔 Got an empty response from Ollama.")
 
