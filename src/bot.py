@@ -1,27 +1,33 @@
 """
   Interfaces discord with the ollama AI service.
 """
-import aiohttp
+import threading
 import os
+from http.server import BaseHTTPRequestHandler, HTTPServer
+import logging
+import aiohttp
 import discord
 import requests
-import asyncio
-from http.server import BaseHTTPRequestHandler, HTTPServer
-import threading
 
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
 OLLAMA_URL = os.getenv("OLLAMA_URL", "http://localhost:11434")
 OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "gemma3:1b-it-q4_K_M")
 
-intents = discord.Intents.default()
-intents.messages = True
-intents.message_content = True
+INTENTS = discord.Intents.default()
+INTENTS.messages = True
+INTENTS.message_content = True
 
-client = discord.Client(intents=intents)
+CLIENT = discord.Client(intents=INTENTS)
 
 # 🩺 Health server to support Kubernetes probes
 class HealthHandler(BaseHTTPRequestHandler):
+    """
+      Handles the health endpoints.
+    """
     def do_GET(self):
+        """
+          Handle GET requests.
+        """
         if self.path == "/healthz":
             if DISCORD_TOKEN:
                 self.send_response(200)
@@ -35,18 +41,25 @@ class HealthHandler(BaseHTTPRequestHandler):
             self.send_response(404)
             self.end_headers()
 
+
 def run_health_server():
+    """
+      Runs the listener for the health server.
+    """
     server = HTTPServer(('', 8080), HealthHandler)
     server.serve_forever()
 
-# 🎤 Respond to messages directed to the bot
-@client.event
+
+@CLIENT.event
 async def on_message(message):
+    """
+      🎤 Respond to messages directed to the bot.
+    """
     # Ignore messages from the bot itself
-    if message.author == client.user:
+    if message.author == CLIENT.user:
         return
 
-    is_mentioned = client.user in message.mentions
+    is_mentioned = CLIENT.user in message.mentions
     is_ask_command = message.content.startswith("!ask")
 
     if not (is_mentioned or is_ask_command):
@@ -56,7 +69,7 @@ async def on_message(message):
     if is_ask_command:
         prompt = prompt[len("!ask"):].strip()
     elif is_mentioned:
-        prompt = prompt.replace(f"<@{client.user.id}>", "").strip()
+        prompt = prompt.replace(f"<@{CLIENT.user.id}>", "").strip()
 
     if not prompt:
         await message.channel.send("Please include a prompt!")
@@ -73,16 +86,24 @@ async def on_message(message):
             ) as resp:
                 data = await resp.json()
                 reply = data.get("response", "🤖 Something went wrong.")
-    except Exception as e:
-        print(f"Error during Ollama request: {e}")
-        reply = "🚨 Failed to contact Ollama service."
+                if reply:
+                    await message.channel.send(reply)
+                else:
+                    await message.channel.send("🤔 Got an empty response from Ollama.")
+    except requests.exceptions.RequestException as error_message:
+        logging.exception("❌ Error contacting Ollama: %s", error_message)
+        await message.channel.send("🚨 Failed to contact Ollama service.")
+    except Exception as error_message:
+        logging.exception("❌ Unexpected error: %s", error_message)
+        await message.channel.send("⚠️ An unexpected error occurred.")
 
-    await message.channel.send(reply)
 
-
-@client.event
+@CLIENT.event
 async def on_ready():
-    print(f"✅ Logged in as {client.user}")
+    """
+      Print when we're ready.
+    """
+    print(f"✅ Logged in as {CLIENT.user}")
 
 # Start health server in background thread
 threading.Thread(target=run_health_server, daemon=True).start()
@@ -91,5 +112,5 @@ threading.Thread(target=run_health_server, daemon=True).start()
 if not DISCORD_TOKEN:
     print("❌ DISCORD_TOKEN environment variable not set.")
 else:
-    client.run(DISCORD_TOKEN)
-
+    print("Starting BOT")
+    CLIENT.run(DISCORD_TOKEN)
