@@ -1,32 +1,29 @@
 """
   Interfaces discord with the ollama AI service.
 """
-
+import aiohttp
 import os
-import threading
-from http.server import BaseHTTPRequestHandler, HTTPServer
 import discord
 import requests
+import asyncio
+from http.server import BaseHTTPRequestHandler, HTTPServer
+import threading
 
-TIMEOUT = 50000
-TOKEN = os.getenv("DISCORD_TOKEN")
-OLLAMA_URL = os.getenv("OLLAMA_URL", "http://ollama:11434")
-OLLAMA_API_URL = os.getenv("OLLAMA_API_URL", "http://ollama:11434/api/generate")
-INTENTS = discord.Intents.default()
-INTENTS.message_content = True              # Required to read message text
-CLIENT = discord.Client(intents=INTENTS)
+DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
+OLLAMA_URL = os.getenv("OLLAMA_URL", "http://localhost:11434")
+OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "gemma3:1b-it-q4_K_M")
 
-OLLAMA_API_URL = "http://ollama:11434/api/generate"
-OLLAMA_MODEL = "gemma3:1b-it-q4_K_M"
+intents = discord.Intents.default()
+intents.messages = True
+intents.message_content = True
 
+client = discord.Client(intents=intents)
+
+# 🩺 Health server to support Kubernetes probes
 class HealthHandler(BaseHTTPRequestHandler):
-    """ Add a handler for the healthcheck. """
-
     def do_GET(self):
-        """ Run the logic for the health endpoints. """
-        if self.path == '/healthz':
-            token = os.getenv("DISCORD_TOKEN", "")
-            if token:
+        if self.path == "/healthz":
+            if DISCORD_TOKEN:
                 self.send_response(200)
                 self.end_headers()
                 self.wfile.write(b"OK")
@@ -39,39 +36,60 @@ class HealthHandler(BaseHTTPRequestHandler):
             self.end_headers()
 
 def run_health_server():
-    """ Run the healthcheck endpoint on port 8080. """
     server = HTTPServer(('', 8080), HealthHandler)
     server.serve_forever()
 
-@CLIENT.event
-async def on_ready():
-    """ Echo who we're logged in as. """
-    print(f"Logged in as {CLIENT.user}")
-
-
-@CLIENT.event
+# 🎤 Respond to messages directed to the bot
+@client.event
 async def on_message(message):
-    """ Sends AI reply from message. """
-
-    # Prevent bot from replying to itself.
-    if message.author == CLIENT.user:
+    # Ignore messages from the bot itself
+    if message.author == client.user:
         return
 
-    prompt = message.content.strip()
-    user = message.author.name  # or message.author.display_name
-    print(f"Received message from {user}: {prompt}")
+    is_mentioned = client.user in message.mentions
+    is_ask_command = message.content.startswith("!ask")
 
-    if message.content.startswith("!ask"):
-        prompt = message.content[5:]
-        res = requests.post(f"{OLLAMA_URL}/api/generate", json={
-            "model": "gemma3:1b-it-q4_K_M",
-            "prompt": prompt
-        }, timeout=TIMEOUT)
-        reply = res.json().get("response", "Error from Ollama.")
-        await message.channel.send(reply)
+    if not (is_mentioned or is_ask_command):
+        return
+
+    prompt = message.content
+    if is_ask_command:
+        prompt = prompt[len("!ask"):].strip()
+    elif is_mentioned:
+        prompt = prompt.replace(f"<@{client.user.id}>", "").strip()
+
+    if not prompt:
+        await message.channel.send("Please include a prompt!")
+        return
+
+    print(f"[{message.author}] asked: {prompt}")
+
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.post(
+                f"{OLLAMA_URL}/api/generate",
+                json={"model": OLLAMA_MODEL, "prompt": prompt},
+                timeout=aiohttp.ClientTimeout(total=60)
+            ) as resp:
+                data = await resp.json()
+                reply = data.get("response", "🤖 Something went wrong.")
+    except Exception as e:
+        print(f"Error during Ollama request: {e}")
+        reply = "🚨 Failed to contact Ollama service."
+
+    await message.channel.send(reply)
 
 
-# Start health server in a background thread
+@client.event
+async def on_ready():
+    print(f"✅ Logged in as {client.user}")
+
+# Start health server in background thread
 threading.Thread(target=run_health_server, daemon=True).start()
-print(TOKEN)
-CLIENT.run(TOKEN)
+
+# Run bot
+if not DISCORD_TOKEN:
+    print("❌ DISCORD_TOKEN environment variable not set.")
+else:
+    client.run(DISCORD_TOKEN)
+
