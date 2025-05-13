@@ -1,0 +1,32 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pull-ollama-models
+spec:
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: pull-model
+          image: ollama/ollama:latest
+          command: ["/bin/bash", "-c"]
+          args:
+            - |
+              sleep 10
+              apt-get update && apt-get install -y jq curl
+              MODELS=(
+                phi:latest
+                dolphin-phi:2.7b
+                gemma3:4b-it-q4_K_M
+                gemma3:1b-it-q4_K_M
+              )
+              for model in "${MODELS[@]}"; do
+                OLLAMA_HOST=http://ollama:11434 ollama pull "$model"
+              done
+          volumeMounts:
+            - name: ollama-data
+              mountPath: /root/.ollama
+      volumes:
+        - name: ollama-data
+          emptyDir: {}
