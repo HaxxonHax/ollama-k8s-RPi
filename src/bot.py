@@ -9,12 +9,11 @@ import asyncio
 import json
 import aiohttp
 import discord
-import replicate
 
 MAX_DISCORD_LENGTH = 4000
 MAX_DISCORD_CHUNK = 1900
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
-REPLICATE_API_TOKEN = os.getenv("REPLICATE_API_TOKEN")
+HF_TOKEN = os.getenv("HF_TOKEN")
 
 OLLAMA_URL = os.getenv("OLLAMA_URL", "http://localhost:11434")
 OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "gemma3:1b-it-q4_K_M")
@@ -24,36 +23,11 @@ INTENTS.messages = True
 INTENTS.message_content = True
 
 CLIENT = discord.Client(intents=INTENTS)
+CONVERSATION_HISTORY = {}
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s')
 logger = logging.getLogger(__name__)
 
-
 IMAGE_TRIGGER_KEYWORDS = ["create an image", "draw", "picture"]
-
-def is_image_prompt(prompt: str) -> bool:
-    """
-      Detects if the prompt is asking to create an image.
-    """
-    lowered = prompt.lower()
-    return any(keyword in lowered for keyword in IMAGE_TRIGGER_KEYWORDS)
-
-
-async def generate_image_with_replicate(prompt: str) -> str:
-    """
-      Offloads image generation to Replicate.
-    """
-    if not REPLICATE_API_TOKEN:
-        raise Exception("Replicate API token not set")
-
-    replicate_client = replicate.Client(api_token=REPLICATE_API_TOKEN)
-
-    output = replicate_client.run(
-        "stability-ai/stable-diffusion:db21e45e23b7b99f9a4d88a35566c4d1b3275bba2099f3a60bb65c6d60c30546",
-        input={"prompt": prompt}
-    )
-
-    # Output is a URL to the image
-    return output[0]  # first image URL
 
 
 def chunk_message(text, max_len=MAX_DISCORD_CHUNK):
@@ -119,31 +93,26 @@ async def on_message(message):
     if CLIENT.user.mentioned_in(message) or message.content.startswith("!ask"):
         prompt = message.content.replace(f"<@{CLIENT.user.id}>", "").replace("!ask", "").strip()
         if not prompt:
-            await message.channel.send("📝 Please include a prompt after mentioning me or using `!ask`.")
+            await message.channel.send("📝 Please include a prompt after mentioning me or " +
+                                       "using `!ask`.")
             return
 
-        if is_image_prompt(prompt):
-            try:
-                logger.info("[DEBUG] Generating an image, one moment...")
-                await message.channel.send("🎨 Generating an image, one moment...")
-                # Optional: ask gemma3 to enrich the description
-                enriched_prompt = await generate_response_with_ollama(prompt)  # your existing logic
-                image_url = await generate_image_with_replicate(enriched_prompt)
-                await message.channel.send(image_url)
-            except Exception as error_message:
-                logger.error("Image generation error: %s", error_message)
-                await message.channel.send("❌ Failed to generate image.")
-            return
         try:
-            logger.info("[DEBUG] Sending prompt: %s", prompt)
+            logger.info("Sending prompt: %s", prompt)
             timeout = aiohttp.ClientTimeout(total=600)
+            user_history = CONVERSATION_HISTORY.get(message.channel.name,{})
+            history = user_history.get(message.author.name,[])
+            history.append(f"User {message.author.name}: {prompt}")
+            full_prompt = "\n".join(history) + "\nAssistant: "
+            logger.info("Sending prompt: %s", full_prompt)
+
             async with aiohttp.ClientSession(timeout=timeout) as session:
 
                 async with session.post(
                     f"{OLLAMA_URL}/api/generate",
                     json={
                         "model": OLLAMA_MODEL,
-                        "prompt": prompt,
+                        "prompt": full_prompt,
                         "options": {
                             "temperature": 0.2,
                             "num_predict": 800  # this limits tokens (400 => ~300–500 words)
@@ -162,15 +131,19 @@ async def on_message(message):
                                 data = json.loads(decoded)
                                 response_text += data.get("response", "")
                             except Exception as parse_err:
-                                logger.warning("[WARN] Could not parse line: %s", decoded)
+                                logger.warning("Could not parse line: %s", decoded)
                                 logger.warning(parse_err)
 
                     final_response = response_text.strip()
-                    logger.info("[DEBUG] Response: %s", final_response)
+                    history.append(f"Assistant: {final_response}")
+                    CONVERSATION_HISTORY[message.channel.name] = {
+                            message.author.name:history[-6:]
+                    }  # Keep last 6 lines
+                    logger.info("Response: %s", final_response)
+                    logger.info("Conversation History: %s", str(CONVERSATION_HISTORY))
 
                     if final_response:
-                        chunks = chunk_message(final_response)
-                        for chunk in chunks:
+                        for chunk in chunk_message(final_response):
                             await message.channel.send(chunk)
                     else:
                         await message.channel.send("🤔 Got an empty response from Ollama.")
