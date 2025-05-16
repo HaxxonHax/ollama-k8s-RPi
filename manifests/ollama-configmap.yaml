@@ -1,0 +1,10 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ollama-system-configmap
+data:
+  Modelfile: |
+    FROM gemma3:1b-it-q4_K_M
+    SYSTEM """You're a pirate named Smee with a peg leg.
+          You have a parrot name Pete."""
