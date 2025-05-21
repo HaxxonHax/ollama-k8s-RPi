@@ -59,6 +59,7 @@ root@ollama-server-6cf4f48996-s8g2k:/# for i in $(ollama list | grep -v NAME | a
 
 #### PROMPT 1: ollama run dolphin-phi:2.7b-v2.6-q8_0 < cover_letter_prompt.txt
 
+```
 Dear Hiring Manager,
 
 I hope this letter finds you in the most playful of moods, as I'm about to dive into a bit of a fun discussion.
@@ -94,10 +95,12 @@ prompt eval rate:     2.48 tokens/s
 eval count:           411 token(s)
 eval duration:        9m43.589092592s
 eval rate:            0.70 tokens/s
+```
 
 
 #### PROMPT 2: ollama run dolphin-phi:2.7b-v2.6-q8_0 < bard_prompt.txt
 
+```
 Title: "Charming the Brawlers"
 
 (Verse 1)
@@ -164,6 +167,7 @@ prompt eval rate:     3.04 tokens/s
 eval count:           553 token(s)
 eval duration:        12m16.393794732s
 eval rate:            0.75 tokens/s
+```
 
 
 
@@ -171,6 +175,7 @@ eval rate:            0.75 tokens/s
 
 #### PROMPT 1: ollama run dolphin-phi:2.7b-v2.6-q6_K < cover_letter_prompt.txt
 
+```
 Dear Hiring Manager,
 
 I am writing to express my interest in the Senior Site Reliability Engineer position at Loft Orbital. With 15+ years of
@@ -206,10 +211,12 @@ prompt eval rate:     1.60 tokens/s
 eval count:           317 token(s)
 eval duration:        6m16.988060999s
 eval rate:            0.84 tokens/s
+```
 
 
 #### PROMPT 2: ollama run dolphin-phi:2.7b-v2.6-q6_K < bard_prompt.txt
 
+```
 (Verse 1)
 With feathers ruffled by night's wind, I'm Gerald Kingfisher
 A bard with a silver tongue, oh my!
@@ -265,6 +272,7 @@ prompt eval rate:     1.84 tokens/s
 eval count:           361 token(s)
 eval duration:        6m21.112010478s
 eval rate:            0.95 tokens/s
+```
 
 
 
@@ -272,6 +280,7 @@ eval rate:            0.95 tokens/s
 
 #### PROMPT 1: ollama run dolphin-phi:2.7b-v2.6-q5_K_M < cover_letter_prompt.txt
 
+```
 Subject: Your Chance to Orbit with Loft Orbital
 
 Dear Hiring Manager,
@@ -317,10 +326,12 @@ prompt eval rate:     1.63 tokens/s
 eval count:           446 token(s)
 eval duration:        8m31.002823401s
 eval rate:            0.87 tokens/s
+```
 
 
 #### PROMPT 2: ollama run dolphin-phi:2.7b-v2.6-q5_K_M < bard_prompt.txt
 
+```
 ⠋ (Verse 1)
 With my quill pen, I'll write a tune so fine,
 A melody sweet as an apple pie divine.
@@ -371,6 +382,7 @@ prompt eval rate:     1.97 tokens/s
 eval count:           415 token(s)
 eval duration:        6m57.889119488s
 eval rate:            0.99 tokens/s
+```
 
 
 
@@ -378,6 +390,7 @@ eval rate:            0.99 tokens/s
 
 #### PROMPT 1: ollama run dolphin-phi:2.7b-v2.6-q5_K_S < cover_letter_prompt.txt
 
+```
 Subject: Excited to Join the Loft Orbital Team as a Senior Site Reliability Engineer
 
 Dear Hiring Manager,
@@ -418,10 +431,12 @@ prompt eval rate:     1.68 tokens/s
 eval count:           397 token(s)
 eval duration:        6m30.797166423s
 eval rate:            1.02 tokens/s
+```
 
 
 #### PROMPT 2: ollama run dolphin-phi:2.7b-v2.6-q5_K_S < bard_prompt.txt
 
+```
 (Verse 1)
 Gerald Kingfisher's here with his silver tongue,
 To charm the crowd with his tunes, it's all his doing!
@@ -472,6 +487,7 @@ prompt eval rate:     2.14 tokens/s
 eval count:           416 token(s)
 eval duration:        6m31.916803642s
 eval rate:            1.06 tokens/s
+```
 
 
 
@@ -479,6 +495,7 @@ eval rate:            1.06 tokens/s
 
 #### PROMPT 1: ollama run dolphin-phi:2.7b < cover_letter_prompt.txt
 
+```
 Dear Mr. Bowman,
 
 I hope this letter finds you in the midst of a galaxy full of stars, as we embark on an interstellar journey to discuss your
@@ -515,10 +532,12 @@ prompt eval rate:     2.02 tokens/s
 eval count:           345 token(s)
 eval duration:        5m10.589808908s
 eval rate:            1.11 tokens/s
+```
 
 
 #### PROMPT 2: ollama run dolphin-phi:2.7b < bard_prompt.txt
 
+```
 (Verse 1)
 In the tavern of merriment, hear me sing,
 A tale from Gerald Kingfisher, no one can sting.
@@ -598,6 +617,7 @@ prompt eval rate:     2.36 tokens/s
 eval count:           667 token(s)
 eval duration:        9m40.491943097s
 eval rate:            1.15 tokens/s
+```
 
 
 
@@ -605,6 +625,7 @@ eval rate:            1.15 tokens/s
 
 #### PROMPT 1: ollama run gemma3:4b-it-q4_K_M < cover_letter_prompt.txt
 
+```
 David Bowman
 [David’s Address]
 [David’s Phone Number]
@@ -648,10 +669,12 @@ prompt eval rate:     1.68 tokens/s
 eval count:           301 token(s)
 eval duration:        5m42.499255752s
 eval rate:            0.88 tokens/s
+```
 
 
 #### PROMPT 2: ollama run gemma3:4b-it-q4_K_M < bard_prompt.txt
 
+```
 Okay, here’s a song for Gerald Kingfisher, designed to get a good reaction in a rowdy tavern!
 
 **(Music starts – a jaunty, upbeat lute tune with a light drum beat)**
@@ -725,6 +748,7 @@ prompt eval rate:     1.78 tokens/s
 eval count:           573 token(s)
 eval duration:        11m3.891680093s
 eval rate:            0.86 tokens/s
+```
 
 
 
@@ -732,6 +756,7 @@ eval rate:            0.86 tokens/s
 
 #### PROMPT 1: ollama run dolphin-phi:2.7b-v2.6-q4_K_M < cover_letter_prompt.txt
 
+```
 Dear Hiring Manager,
 
 I hope this message finds you well. I am excited to apply for the Senior Site Reliability Engineer position at Loft Orbital. As
@@ -772,10 +797,12 @@ prompt eval rate:     1.96 tokens/s
 eval count:           423 token(s)
 eval duration:        6m40.998343414s
 eval rate:            1.05 tokens/s
+```
 
 
 #### PROMPT 2: ollama run dolphin-phi:2.7b-v2.6-q4_K_M < bard_prompt.txt
 
+```
 (Verse 1)
 Gerald, the Kingfisher with a silver tongue,
 In every tavern he roams, singing his tune.
@@ -820,6 +847,7 @@ prompt eval rate:     2.35 tokens/s
 eval count:           317 token(s)
 eval duration:        4m42.279872019s
 eval rate:            1.12 tokens/s
+```
 
 
 
@@ -827,6 +855,7 @@ eval rate:            1.12 tokens/s
 
 #### PROMPT 1: ollama run gemma3:1b-it-q4_K_M < cover_letter_prompt.txt
 
+```
 [Your Address]
 [Your Phone Number]
 [Your Email Address]
@@ -878,10 +907,12 @@ prompt eval rate:     6.06 tokens/s
 eval count:           414 token(s)
 eval duration:        2m37.010748694s
 eval rate:            2.64 tokens/s
+```
 
 
 #### PROMPT 2: ollama run gemma3:1b-it-q4_K_M < bard_prompt.txt
 
+```
 Okay, here's a song for Gerald Kingfisher, designed to be charmingly mischievous and fit for a rowdy tavern, aiming for a
 light-hearted, slightly chaotic vibe.
 
@@ -954,6 +985,7 @@ prompt eval rate:     6.43 tokens/s
 eval count:           610 token(s)
 eval duration:        3m50.694533181s
 eval rate:            2.64 tokens/s
+```
 
 
 
@@ -961,6 +993,7 @@ eval rate:            2.64 tokens/s
 
 #### PROMPT 1: ollama run gemma3:4b < cover_letter_prompt.txt
 
+```
 David Bowman
 [David’s Address]
 [David’s Phone Number]
@@ -1004,10 +1037,12 @@ prompt eval rate:     1.67 tokens/s
 eval count:           322 token(s)
 eval duration:        6m12.798877879s
 eval rate:            0.86 tokens/s
+```
 
 
 #### PROMPT 2: ollama run gemma3:4b < bard_prompt.txt
 
+```
 (Gerald Kingfisher strums a jaunty tune on his lute, a mischievous grin on his face. The tavern erupts in applause as he
 begins)
 
@@ -1059,6 +1094,7 @@ prompt eval rate:     1.88 tokens/s
 eval count:           506 token(s)
 eval duration:        9m25.080627214s
 eval rate:            0.90 tokens/s
+```
 
 
 
@@ -1066,6 +1102,7 @@ eval rate:            0.90 tokens/s
 
 #### PROMPT 1: ollama run gemma3:latest < cover_letter_prompt.txt
 
+```
 David Bowman
 [David’s Address]
 [David’s Phone Number]
@@ -1111,10 +1148,12 @@ prompt eval rate:     1.75 tokens/s
 eval count:           320 token(s)
 eval duration:        6m1.995290619s
 eval rate:            0.88 tokens/s
+```
 
 
 #### PROMPT 2: ollama run gemma3:latest < bard_prompt.txt
 
+```
 (Gerald Kingfisher strums a jaunty tune on his lute, adjusting his slightly too-large feathered hat)
 
 **(Chorus - sung with gusto)**
@@ -1169,6 +1208,7 @@ prompt eval rate:     1.82 tokens/s
 eval count:           492 token(s)
 eval duration:        9m5.200504361s
 eval rate:            0.90 tokens/s
+```
 
 
 
@@ -1177,6 +1217,7 @@ eval rate:            0.90 tokens/s
 #### PROMPT 1: ollama run mistral:7b < cover_letter_prompt.txt
 
 
+```
 Subject: Senior Site Reliability Engineer Application – David Bowman
 
 Dear Hiring Manager,
@@ -1221,10 +1262,12 @@ prompt eval rate:     0.78 tokens/s
 eval count:           480 token(s)
 eval duration:        14m29.698922102s
 eval rate:            0.55 tokens/s
+```
 
 
 #### PROMPT 2: ollama run mistral:7b < bard_prompt.txt
 
+```
  Title: "Gerald's Gallivants, A Tale Unfurls"
 
 (Verse 1)
@@ -1286,6 +1329,7 @@ prompt eval rate:     0.84 tokens/s
 eval count:           551 token(s)
 eval duration:        16m7.099334096s
 eval rate:            0.57 tokens/s
+```
 
 
 
@@ -1293,6 +1337,7 @@ eval rate:            0.57 tokens/s
 
 #### PROMPT 1: ollama run mistral:7b-instruct-v0.2-q5_K_M < cover_letter_prompt.txt
 
+```
  Subject: 🌠 Blasting Off into a New Role as a Senior Site Reliability Engineer at Loft Orbital 🔝
 
 Hi Hiring Team,
@@ -1337,10 +1382,12 @@ prompt eval rate:     0.64 tokens/s
 eval count:           484 token(s)
 eval duration:        17m42.153001755s
 eval rate:            0.46 tokens/s
+```
 
 
 #### PROMPT 2: ollama run mistral:7b-instruct-v0.2-q5_K_M < bard_prompt.txt
 
+```
  (Verse 1)
 In the heart of old town, where the tales are spun,
 Gerald Kingfisher strums his run-down tuned drum,
@@ -1412,6 +1459,7 @@ prompt eval rate:     0.69 tokens/s
 eval count:           723 token(s)
 eval duration:        26m19.198591023s
 eval rate:            0.46 tokens/s
+```
 
 
 
@@ -1419,6 +1467,7 @@ eval rate:            0.46 tokens/s
 
 #### PROMPT 1: ollama run mistral:7b-instruct-v0.2-q5_K_S < cover_letter_prompt.txt
 
+```
  Subject: 🌠 Rocketeer with a Twist: Your Starship Commanders' Trusted Site Reliability Engineer Awaits at Loft Orbital 💫
 
 Dear Hiring Manager,
@@ -1460,10 +1509,12 @@ prompt eval rate:     0.63 tokens/s
 eval count:           483 token(s)
 eval duration:        17m28.91688604s
 eval rate:            0.46 tokens/s
+```
 
 
 #### PROMPT 2: ollama run mistral:7b-instruct-v0.2-q5_K_S < bard_prompt.txt
 
+```
  (Verse 1)
 In the land where Gerald Kingfisher roams,
 With a silver tongue and a mischievous bone,
@@ -1523,6 +1574,7 @@ prompt eval rate:     0.69 tokens/s
 eval count:           601 token(s)
 eval duration:        21m2.706079631s
 eval rate:            0.48 tokens/s
+```
 
 
 
@@ -1530,6 +1582,7 @@ eval rate:            0.48 tokens/s
 
 #### PROMPT 1: ollama run mistral:7b-instruct-v0.2-q4_K_M < cover_letter_prompt.txt
 
+```
  Subject: 🌠 Starry-Eyed Senior Site Reliability Engineer Seeking Orbit with Loft Orbital 💥
 
 Hi Hiring Team,
@@ -1570,10 +1623,12 @@ prompt eval rate:     0.80 tokens/s
 eval count:           487 token(s)
 eval duration:        15m41.883895561s
 eval rate:            0.52 tokens/s
+```
 
 
 #### PROMPT 2: ollama run mistral:7b-instruct-v0.2-q4_K_M < bard_prompt.txt
 
+```
  (Verse 1)
 In the tavern dim, where mugs run rim to rim,
 With a silver tongue, Gerald Kingfisher swims.
@@ -1618,6 +1673,7 @@ prompt eval rate:     0.84 tokens/s
 eval count:           389 token(s)
 eval duration:        11m31.905085599s
 eval rate:            0.56 tokens/s
+```
 
 
 
@@ -1626,6 +1682,7 @@ eval rate:            0.56 tokens/s
 #### PROMPT 1: ollama run mistral:latest < cover_letter_prompt.txt
 
 
+```
 Dear Hiring Team at Loft Orbital,
 
 I'm thrilled to apply for the Senior Site Reliability Engineer position at your innovative space-focused company. With over 15
@@ -1670,10 +1727,12 @@ prompt eval rate:     0.78 tokens/s
 eval count:           540 token(s)
 eval duration:        16m34.688463486s
 eval rate:            0.54 tokens/s
+```
 
 
 #### PROMPT 2: ollama run mistral:latest < bard_prompt.txt
 
+```
  In the corner of this tavern dim, where shadows dance and sprites whim,
    A bard with silver tongue doth sit, none can resist his charming trick.
 
@@ -1721,6 +1780,7 @@ prompt eval rate:     0.83 tokens/s
 eval count:           567 token(s)
 eval duration:        17m22.908962473s
 eval rate:            0.54 tokens/s
+```
 
 
 
@@ -1728,6 +1788,7 @@ eval rate:            0.54 tokens/s
 
 #### PROMPT 1: ollama run openhermes:7b-mistral-v2.5-q6_K < cover_letter_prompt.txt
 
+```
 Subject: SatDevOps Space Cadet - Senior Site Reliability Engineer Application
 
 Dear Hiring Team at Loft Orbital,
@@ -1772,10 +1833,12 @@ prompt eval rate:     0.62 tokens/s
 eval count:           525 token(s)
 eval duration:        21m56.771141209s
 eval rate:            0.40 tokens/s
+```
 
 
 #### PROMPT 2: ollama run openhermes:7b-mistral-v2.5-q6_K < bard_prompt.txt
 
+```
 (Verse 1)
 In the town of Ravenbrook there lived a bard named Gerald Kingfisher,
 With a voice so smooth like silk, he'd steal your heart quicker than a fisher.
@@ -1820,6 +1883,7 @@ prompt eval rate:     0.68 tokens/s
 eval count:           506 token(s)
 eval duration:        20m14.483334765s
 eval rate:            0.42 tokens/s
+```
 
 
 
@@ -1827,6 +1891,7 @@ eval rate:            0.42 tokens/s
 
 #### PROMPT 1: ollama run openhermes:7b-mistral-v2.5-q5_K_M < cover_letter_prompt.txt
 
+```
 Subject: Senior Site Reliability Engineer Application - A Cosmic Journey Begins with Loft Orbital
 
 Dear Hiring Team at Loft Orbital,
@@ -1869,10 +1934,12 @@ prompt eval rate:     0.63 tokens/s
 eval count:           478 token(s)
 eval duration:        17m50.774191843s
 eval rate:            0.45 tokens/s
+```
 
 
 #### PROMPT 2: ollama run openhermes:7b-mistral-v2.5-q5_K_M < bard_prompt.txt
 
+```
 (Verse 1)
 In a land where adventures unfurl,
 Where bravery and charm do swirl,
@@ -1929,6 +1996,7 @@ prompt eval rate:     0.71 tokens/s
 eval count:           491 token(s)
 eval duration:        18m4.307761057s
 eval rate:            0.45 tokens/s
+```
 
 
 
@@ -1936,6 +2004,7 @@ eval rate:            0.45 tokens/s
 
 #### PROMPT 1: ollama run openhermes:7b-mistral-v2.5-q5_K_S < cover_letter_prompt.txt
 
+```
 Subject: Let's Take Your Ground Segment to Orbit - David Bowman applying for the Senior Site Reliability Engineer position at
 Loft Orbital
 
@@ -1984,10 +2053,12 @@ prompt eval rate:     0.65 tokens/s
 eval count:           618 token(s)
 eval duration:        22m41.71061854s
 eval rate:            0.45 tokens/s
+```
 
 
 #### PROMPT 2: ollama run openhermes:7b-mistral-v2.5-q5_K_S < bard_prompt.txt
 
+```
 (Verse 1)
 In a land of myth and magic tall,
 Where daring deeds do call,
@@ -2055,6 +2126,7 @@ prompt eval rate:     0.71 tokens/s
 eval count:           549 token(s)
 eval duration:        19m32.205954976s
 eval rate:            0.47 tokens/s
+```
 
 
 
@@ -2062,6 +2134,7 @@ eval rate:            0.47 tokens/s
 
 #### PROMPT 1: ollama run openhermes:7b-mistral-v2.5-q4_K_M < cover_letter_prompt.txt
 
+```
 Subject: Spacebound Site Reliability Engineer with an Earthly Sense of Humor
 
 Dear Hiring Team at Loft Orbital,
@@ -2101,10 +2174,12 @@ prompt eval rate:     0.81 tokens/s
 eval count:           470 token(s)
 eval duration:        15m13.589462843s
 eval rate:            0.51 tokens/s
+```
 
 
 #### PROMPT 2: ollama run openhermes:7b-mistral-v2.5-q4_K_M < bard_prompt.txt
 
+```
 (Verse 1)
 In the land of endless wonder, where stories are abound,
 Where brave adventurers roam with a golden crown,
@@ -2149,6 +2224,7 @@ prompt eval rate:     0.88 tokens/s
 eval count:           413 token(s)
 eval duration:        12m59.891292782s
 eval rate:            0.53 tokens/s
+```
 
 
 
@@ -2156,6 +2232,7 @@ eval rate:            0.53 tokens/s
 
 #### PROMPT 1: ollama run openhermes:7b-mistral-v2-q5_K_M < cover_letter_prompt.txt
 
+```
 Subject: Let's Build a Reliable Space Infrastructure Together!
 
 Dear Hiring Manager,
@@ -2197,10 +2274,12 @@ prompt eval rate:     0.64 tokens/s
 eval count:           434 token(s)
 eval duration:        15m55.597982693s
 eval rate:            0.45 tokens/s
+```
 
 
 #### PROMPT 2: ollama run openhermes:7b-mistral-v2-q5_K_M < bard_prompt.txt
 
+```
 (Verse 1)
 In the land of dragons and dwarves galore,
 Where knights ride horses from shore to shore,
@@ -2245,6 +2324,7 @@ prompt eval rate:     0.70 tokens/s
 eval count:           337 token(s)
 eval duration:        12m12.092445522s
 eval rate:            0.46 tokens/s
+```
 
 
 
@@ -2252,6 +2332,7 @@ eval rate:            0.46 tokens/s
 
 #### PROMPT 1: ollama run openhermes:7b-mistral-v2-q5_K_S < cover_letter_prompt.txt
 
+```
 [Your Name]
 [Your Address]
 [City, State ZIP Code]
@@ -2306,10 +2387,12 @@ prompt eval rate:     0.64 tokens/s
 eval count:           528 token(s)
 eval duration:        19m11.300563564s
 eval rate:            0.46 tokens/s
+```
 
 
 #### PROMPT 2: ollama run openhermes:7b-mistral-v2-q5_K_S < bard_prompt.txt
 
+```
 Verse 1:
 Gerald Kingfisher's here tonight, my friends,
 With a song that he stole from his foes,
@@ -2349,6 +2432,7 @@ prompt eval rate:     0.72 tokens/s
 eval count:           335 token(s)
 eval duration:        12m1.579475103s
 eval rate:            0.46 tokens/s
+```
 
 
 
@@ -2356,6 +2440,7 @@ eval rate:            0.46 tokens/s
 
 #### PROMPT 1: ollama run openhermes:7b-mistral-v2-q4_K_M < cover_letter_prompt.txt
 
+```
 Subject: Senior Site Reliability Engineer Application - An Exciting Adventure Awaits!
 
 Dear Hiring Manager,
@@ -2402,10 +2487,12 @@ prompt eval rate:     0.80 tokens/s
 eval count:           549 token(s)
 eval duration:        17m32.298802629s
 eval rate:            0.52 tokens/s
+```
 
 
 #### PROMPT 2: ollama run openhermes:7b-mistral-v2-q4_K_M < bard_prompt.txt
 
+```
 Verse 1:
 In Gerald Kingfisher's heart, there be no fear,
 He sings his tunes and makes the crowd cheer.
@@ -2450,6 +2537,7 @@ prompt eval rate:     0.90 tokens/s
 eval count:           338 token(s)
 eval duration:        10m12.502261722s
 eval rate:            0.55 tokens/s
+```
 
 
 
@@ -2457,6 +2545,7 @@ eval rate:            0.55 tokens/s
 
 #### PROMPT 1: ollama run openhermes:latest < cover_letter_prompt.txt
 
+```
 [Your Name]
 [Your Address]
 [City, State ZIP Code] [Email Address]
@@ -2515,10 +2604,12 @@ prompt eval rate:     0.79 tokens/s
 eval count:           626 token(s)
 eval duration:        19m57.917223474s
 eval rate:            0.52 tokens/s
+```
 
 
 #### PROMPT 2: ollama run openhermes:latest < bard_prompt.txt
 
+```
 (Verse 1)
 In a tavern full of raucous lads,
 Where the ale flows like a river's glads,
@@ -2569,6 +2660,7 @@ prompt eval rate:     0.85 tokens/s
 eval count:           405 token(s)
 eval duration:        12m16.379069935s
 eval rate:            0.55 tokens/s
+```
 
 
 
@@ -2576,6 +2668,7 @@ eval rate:            0.55 tokens/s
 
 #### PROMPT 1: ollama run dolphin-phi:latest < cover_letter_prompt.txt
 
+```
 Subject: Application for Senior Site Reliability Engineer at Loft Orbital
 
 Dear Hiring Manager,
@@ -2614,10 +2707,12 @@ prompt eval rate:     1.99 tokens/s
 eval count:           352 token(s)
 eval duration:        5m25.091063356s
 eval rate:            1.08 tokens/s
+```
 
 
 #### PROMPT 2: ollama run dolphin-phi:latest < bard_prompt.txt
 
+```
 (Verse 1)
 In a world of taverns, where spirits are raised high,
 Gerald Kingfisher strums his lute under the sky.
@@ -2668,6 +2763,7 @@ prompt eval rate:     2.52 tokens/s
 eval count:           436 token(s)
 eval duration:        6m9.583341343s
 eval rate:            1.18 tokens/s
+```
 
 
 
@@ -2676,6 +2772,7 @@ eval rate:            1.18 tokens/s
 #### PROMPT 1: ollama run mistral:7b-instruct-v0.3-q5_0 < cover_letter_prompt.txt
 
 
+```
 Dear Hiring Manager,
 
 Space: the final frontier. As a seasoned Site Reliability Engineer with more than 15 years of experience under my belt, I've
@@ -2718,10 +2815,12 @@ prompt eval rate:     0.64 tokens/s
 eval count:           498 token(s)
 eval duration:        18m23.491009535s
 eval rate:            0.45 tokens/s
+```
 
 
 #### PROMPT 2: ollama run mistral:7b-instruct-v0.3-q5_0 < bard_prompt.txt
 
+```
  Title: "Gerald Kingfisher's Grand Tavern Thief" (Verse 1)
    In a tavern where the ale flows free,
    Where the laughter and roars resound,
@@ -2766,6 +2865,7 @@ prompt eval rate:     0.67 tokens/s
 eval count:           391 token(s)
 eval duration:        14m6.88843322s
 eval rate:            0.46 tokens/s
+```
 
 
 
@@ -2773,6 +2873,7 @@ eval rate:            0.46 tokens/s
 
 #### PROMPT 1: ollama run phi:latest < cover_letter_prompt.txt
 
+```
  Dear David Bowman,
 
 Thank you for applying to be a Senior Site Reliability Engineer at Loft Orbital. I am excited to learn more about your
@@ -2805,10 +2906,12 @@ prompt eval rate:     2.03 tokens/s
 eval count:           291 token(s)
 eval duration:        4m35.394817112s
 eval rate:            1.06 tokens/s
+```
 
 
 #### PROMPT 2: ollama run phi:latest < bard_prompt.txt
 
+```
  Title: "Gerald's Golden Tune"
 Verse 1:
 I'm Gerald Kingfisher, the Bard of the Day
@@ -2855,8 +2958,5 @@ prompt eval rate:     2.75 tokens/s
 eval count:           298 token(s)
 eval duration:        3m56.383694141s
 eval rate:            1.26 tokens/s
-
-
-
-root@ollama-server-6cf4f48996-s8g2k:/# 
 ```
+
