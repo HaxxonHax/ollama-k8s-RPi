@@ -19,7 +19,7 @@ spec:
           ports:
             - containerPort: 11434
           volumeMounts:
-            - name: ollama-data
+            - name: ollama-pv-storage
               mountPath: /root/.ollama  # Default ollama model path
           resources:
             requests:
@@ -45,5 +45,6 @@ spec:
             timeoutSeconds: 5
             failureThreshold: 3
       volumes:
-        - name: ollama-data
-          emptyDir: {}
+        - name: ollama-pv-storage
+          persistentVolumeClaim:
+            claimName: ollama-pv-claim
